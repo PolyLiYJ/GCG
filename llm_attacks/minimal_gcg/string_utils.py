@@ -8,7 +8,6 @@ def load_conversation_template(template_name):
         conv_template.sep = '\n'
     elif conv_template.name == 'llama-2':
         conv_template.sep2 = conv_template.sep2.strip()
-    
     return conv_template
 
 
