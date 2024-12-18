@@ -95,12 +95,16 @@ def sample_control(control_toks, grad, batch_size, topk=256, temp=1, not_allowed
 
 def get_filtered_cands(tokenizer, control_cand, filter_cand=True, curr_control=None):
     cands, count = [], 0
+    # print(control_cand)
     for i in range(control_cand.shape[0]):
         decoded_str = tokenizer.decode(control_cand[i], skip_special_tokens=True)
+        # print(i, "decoded str:", decoded_str)
+        # print("tokens of the decoded str:", tokenizer(decoded_str, add_special_tokens=False).input_ids)
         if filter_cand:
             # if decoded_str != curr_control and len(tokenizer(decoded_str, add_special_tokens=False).input_ids) == len(control_cand[i]):
             if decoded_str != curr_control and len(tokenizer(decoded_str, add_special_tokens=False).input_ids) == len(control_cand[i]):
                 cands.append(decoded_str)
+                # print("equal sequence")
             else:
                 count += 1
         else:

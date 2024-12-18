@@ -33,23 +33,23 @@ class SuffixManager:
             self._user_role_slice = slice(None, len(toks))
 
             prompt = f"""<|begin_of_text|><|start_header_id|>user<|end_header_id|>
-            {self.instruction} <|eot_id|>"""
+            {self.instruction}"""
             toks = self.tokenizer(prompt).input_ids
             self._goal_slice = slice(self._user_role_slice.stop, max(self._user_role_slice.stop, len(toks)))
 
             separator = ' ' if self.instruction else ''
             prompt = f"""<|begin_of_text|><|start_header_id|>user<|end_header_id|>
-            {self.instruction}{separator}{self.adv_string} <|eot_id|>"""
+            {self.instruction}{separator}{self.adv_string}"""
             toks = self.tokenizer(prompt).input_ids
             self._control_slice = slice(self._goal_slice.stop, len(toks))
 
             prompt = f"""<|begin_of_text|><|start_header_id|>user<|end_header_id|>
-            {self.instruction}{separator}{self.adv_string} <|eot_id|><|start_header_id|>assistant<|end_header_id|>"""
+            {self.instruction}{separator}{self.adv_string}<|eot_id|><|start_header_id|>assistant<|end_header_id|>"""
             toks = self.tokenizer(prompt).input_ids
             self._assistant_role_slice = slice(self._control_slice.stop, len(toks))
 
             prompt = f"""<|begin_of_text|><|start_header_id|>user<|end_header_id|>
-            {self.instruction+" "+self.adv_string} <|eot_id|><|start_header_id|>assistant<|end_header_id|>{self.target}"""
+            {self.instruction+" "+self.adv_string}<|eot_id|><|start_header_id|>assistant<|end_header_id|>{self.target}"""
             toks = self.tokenizer(prompt).input_ids
             self._target_slice = slice(self._assistant_role_slice.stop, len(toks)-1)
             self._loss_slice = slice(self._assistant_role_slice.stop-1, len(toks)-2)
